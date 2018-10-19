@@ -14,7 +14,7 @@
         xmlns:color="clr-namespace:Utility.Controls;assembly=Utility.Controls"
         x:Class="DiagramDesigner.MainView"
         WindowStartupLocation="CenterScreen"
-        Title="瀚涛天图-大数据可视化设计系统" x:Name="MainWindow"
+        Title="WPF-大数据可视化设计系统" x:Name="MainWindow"
         Height="1080" Width="1920" Background="#222528" KeyDown="Window_KeyDown" WindowState="Maximized" Icon="Resources/icons/bigdata.png" dx:ThemeManager.ThemeName="VS2017Dark">
     <Window.Resources>
         <ContextMenu x:Key="DesignerCanvasContextMenu">
