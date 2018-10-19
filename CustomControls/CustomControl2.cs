@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DevExpress.Xpf.Grid;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -44,7 +45,7 @@ namespace DiagramDesigner.CustomControls
     ///     <MyNamespace:CustomControl2/>
     ///
     /// </summary>
-    public class CustomControl2 : Control
+    public class CustomControl2 : DataGrid
     {
         static CustomControl2()
         {

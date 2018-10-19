@@ -4,26 +4,39 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DiagramDesigner"
+        xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/charts"
         xmlns:cs="clr-namespace:DiagramDesigner.CustomControls"
         xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+        xmlns:dxcore="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking"
+        xmlns:ssw="clr-namespace:DiagramDesigner.Windows.SuspensionWD"    
         xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:model="clr-namespace:DiagramDesigner.Models"
+    xmlns:btn="clr-namespace:DiagramDesigner.CustomControls.Buttons"
+        xmlns:vm="clr-namespace:DiagramDesigner.ViewModel"
+        xmlns:list="clr-namespace:DiagramDesigner.CustomControls.Lists"
         xmlns:dxprg="http://schemas.devexpress.com/winfx/2008/xaml/propertygrid"
+        xmlns:chart="clr-namespace:DiagramDesigner.CustomControls.Charts"
+        xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
+    xmlns:ds="clr-namespace:DiagramDesigner.Windows.WindDataSource"
         x:Class="DiagramDesigner.Window3"
         mc:Ignorable="d"
-        Title="Window3" Height="450" Width="800">
-    <local:DesignerCanvas>
-        <dxprg:PropertyGridControl x:Name="PropertyGridControl" Width="400" Height="600" SelectedObject="{Binding ElementName= test,UpdateSourceTrigger=PropertyChanged}"/>
-
-        <!--<local:DesignerItem Canvas.Left="500" Canvas.Top="300">
-            <dxg:GridControl x:Name="DataGrid" IsHitTestVisible="False">
-                <dxg:GridColumn FieldName="name"></dxg:GridColumn>
-                <dxg:GridColumn FieldName="Length"></dxg:GridColumn>
-            </dxg:GridControl>
-        </local:DesignerItem>-->
-
-        <!--<local:DesignerItem Canvas.Left="500" Canvas.Top="300">-->
-        <cs:CustomControl1 x:Name="test" Height="30" Width="100" Canvas.Left="500" Canvas.Top="300"></cs:CustomControl1>
-        <!--</local:DesignerItem>-->
-
-    </local:DesignerCanvas>
+        Title="SplineAreaChart" Height="600" Width="700" Background="Transparent">
+    <Viewbox>
+        <!--<ScrollViewer  Grid.Row="1"
+                           RenderTransformOrigin="0.5,0.5"
+                           HorizontalAlignment="Stretch"
+                           Margin="0"
+                           Width="Auto"
+                           HorizontalScrollBarVisibility="Visible"
+                           Style="{StaticResource FavsScrollViewer}"
+                           Focusable="True" 
+                           VerticalScrollBarVisibility="Disabled"
+                         >
+            <WrapPanel x:Name="contentPanel"
+                           Orientation="Vertical"
+                           ></WrapPanel>
+        </ScrollViewer>-->
+        
+    </Viewbox>
 </Window>

@@ -1,0 +1,194 @@
+﻿<dx:DXWindow x:Class="DiagramDesigner.Windows.WindDataSource.DataSourceView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" 
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:uc="clr-namespace:DiagramDesigner.UserControls"
+        xmlns:local="clr-namespace:DiagramDesigner.Windows.WindDataSource"
+        mc:Ignorable="d"
+        Title="数据源配置" Height="580" Width="750" Top="360" Left="600" Background="#222528" ResizeMode="NoResize" x:Name="wDataSource" Icon="../../Resources/Images/DataSource.ico" dx:ThemeManager.ThemeName="VS2017Dark">
+    <Window.DataContext>
+        <local:DataSourceViewBindingModel/>
+    </Window.DataContext>
+    <TabControl Background="#222528">
+        <TabItem Header="数据源" Style="{StaticResource TabItemStyle}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="195*"/>
+                    <ColumnDefinition Width="176*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="80"></RowDefinition>
+                    <RowDefinition Height="120"></RowDefinition>
+                    <RowDefinition Height="80"></RowDefinition>
+                    <RowDefinition Height="45"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Grid.ColumnSpan="2">
+                    <Label Content="1.请配置数据源别名" Width="220" HorizontalAlignment="Left" Margin="8 5 0 5" FontSize="16" Foreground="{DynamicResource FontColor}"></Label>
+                    <Border BorderBrush="#ccc" BorderThickness="1" Margin="10 0 10 0">
+                        <Grid Margin="6 10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"></ColumnDefinition>
+                                <ColumnDefinition Width="1.2*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Label Content="数据库别名:" Foreground="{DynamicResource FontColor}"></Label>
+                            <TextBox Grid.Column="1" x:Name="TxtAlias" Width="220" HorizontalAlignment="Left" Margin="10 0" Background="#222528" Foreground="#B7C4CF" VerticalContentAlignment="Center" Text="{Binding Path=SelectedDataSourceModel.DBAlias}"></TextBox>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
+                    <Label Content="2.请选择要配置的源数据库类型" Margin="8 5 0 5" FontSize="16" Foreground="{DynamicResource FontColor}"></Label>
+                    <Border Margin="10 0 10 0" BorderBrush="#B8B8B8" BorderThickness="1">
+                        <ListBox x:Name="Lst" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding DbTypeList}" Height="75">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <i:InvokeCommandAction Command="{Binding SelectionChangedCmd}" CommandParameter="{Binding ElementName=Lst}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <ListBox.Template>
+                                <ControlTemplate>
+                                    <WrapPanel Orientation="Horizontal" IsItemsHost="True"/>
+                                </ControlTemplate>
+                            </ListBox.Template>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Width="130" Height="30" Margin="25 0 0 0">
+                                        <RadioButton x:Name="radioBtn" FontSize="14" GroupName="area" VerticalAlignment="Center">
+                                            <RadioButton.IsChecked>
+                                                <Binding Path="IsSelected" RelativeSource="{RelativeSource AncestorType=ListBoxItem}" Mode="TwoWay" />
+                                            </RadioButton.IsChecked>
+                                        </RadioButton>
+                                        <Label Content="{Binding Name}" VerticalAlignment="Center" Foreground="{DynamicResource FontColor}"></Label>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Border>
+                </StackPanel>
+                <StackPanel Grid.Row="2" Grid.ColumnSpan="2">
+                    <Label Content="3.请配置源数据库的连接字符串" Width="220" HorizontalAlignment="Left" Margin="8 5 0 5" FontSize="16" Foreground="{DynamicResource FontColor}"></Label>
+                    <Border BorderBrush="#ccc" BorderThickness="1" Margin="10 0 10 0">
+                        <Grid Margin="6 10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="100" ></ColumnDefinition>
+                                <ColumnDefinition Width="100" ></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Label Content="连接字符串:" Foreground="{DynamicResource FontColor}"></Label>
+                            <TextBox Grid.Column="1" Width="340" HorizontalAlignment="Left" Margin="10 0" VerticalContentAlignment="Center" Background="#222528" Foreground="#B7C4CF"  Text="{Binding SelectedDataSourceModel.DBConnUrl}"></TextBox>
+                            <Label x:Name="TestResultlbl" Grid.Column="2" Content="{Binding TestResult}" Foreground="Red"  ></Label>
+                            <Button x:Name="ConnButton" Grid.Column="3" Content="测试连接" HorizontalAlignment="Left" Margin="0 0 20 0" Command="{Binding TestConnectionCmd}"></Button>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+                <StackPanel Grid.Row="3" Grid.ColumnSpan="2">
+                    <Border BorderBrush="#ccc" BorderThickness="0">
+                        <StackPanel Margin="6 10" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Grid.Column="1" Content="新增" Width="60"  Command="{Binding AddConfigCmd}"></Button>
+                            <Button Grid.Column="1" Content="保存" Width="60" Margin="20 0 0 0" Command="{Binding SaveConfigCmd}"></Button>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+                <StackPanel Grid.Row="4" Grid.ColumnSpan="2">
+                    <Label Content="已配置列表" Width="220" HorizontalAlignment="Left" Margin="8 5" FontSize="16" Foreground="{DynamicResource FontColor}"></Label>
+                    <DataGrid Name="DataGrid"  AutoGenerateColumns="False" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Auto" ItemsSource="{Binding Path=dataSourceModels}" CanUserAddRows="False" Height="122">
+                        <DataGrid.Columns>
+                            <!--<DataGridTemplateColumn Header="序号" Width="60">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label></Label>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>-->
+                            <DataGridTextColumn Header="数据库类型" Width="100" Binding="{Binding Path=DBType}"/>
+                            <DataGridTextColumn Header="数据源别名" Width="100" Binding="{Binding Path=DBAlias}"/>
+                            <DataGridTextColumn Header="连接字符串" Width="*" Binding="{Binding Path=DBConnUrl}"/>
+                            <DataGridTemplateColumn Header="编辑" Width="40">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button x:Name="BtnEdit" Width="30" Command="{Binding DataContext.EditConfigCmd, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}, Path=SelectedItem}" BorderThickness="0" Cursor="Hand">
+                                            <Button.Template>
+                                                <ControlTemplate>
+                                                    <Image Source="../../Resources/icons/编辑.png" Height="20" Width="20"></Image>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="删除" Width="40">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button x:Name="BtnDelete" Width="30" Height="25" Command="{Binding DataContext.DeleteConfigCmd, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}, Path=SelectedItem}" BorderThickness="0" Cursor="Hand">
+                                            <Button.Template>
+                                                <ControlTemplate>
+                                                    <Image Source="../../Resources/icons/删除.png" Height="20" Width="20"></Image>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Grid>
+        </TabItem>
+        <TabItem Header="数据" Style="{StaticResource TabItemStyle}">
+            <StackPanel>
+                <TabControl Height="200" x:Name="dataSourceTabContrl" TabStripPlacement="Left" Background="#222528" Loaded="dataSourceTabContrl_Loaded">
+                    
+                    <!--<TabItem Header="SQL Server">
+                    -->
+                    <!--<Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal">
+                            <ListBox x:Name="List" Width="120" HorizontalAlignment="Left" ItemsSource="{Binding TabDataSourceModel.DataItems}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="SelectionChanged">
+                                        <i:InvokeCommandAction Command="{Binding SelectionDataItemChangedCmd}" CommandParameter="{Binding ElementName=List}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Width="100" Height="30">
+                                            <Label Content="{Binding Alias}" HorizontalAlignment="Left"></Label>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <StackPanel Margin="10 0 0 0" >
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="别名："></Label>
+                                    <TextBox Width="150" Text="{Binding Path=SelectedDataItemModel.Alias}"></TextBox>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0 15 0 0">
+                                    <Label Content="SQL："></Label>
+                                    <TextBox Width="370" Height="100" Text="{Binding SelectedDataItemModel.SqlStr}"></TextBox>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="80 10 0 0">
+                                    <Button Content="执行" Command="{Binding ExecuteDataItemCmd}"></Button>
+                                    <Button Content="新增" Command="{Binding AddDataItemCmd}" Margin="20 0 0 0"></Button>
+                                    <Button Content="删除" Command="{Binding DeleteDataItemCmd}" Margin="20 0 0 0"></Button>
+                                    <Button Content="保存" Command="{Binding SaveDataItemCmd }" Margin="20 0 0 0"></Button>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                        
+                    </Grid>-->
+                    <!--
+                </TabItem>-->
+                </TabControl>
+                <!--<DataGrid></DataGrid>-->
+                <DataGrid ItemsSource="{Binding SqlExecResult}" CanUserAddRows="False" VerticalScrollBarVisibility="Auto" Margin="0 10 0 0" Height="290"  RowHeight="30"></DataGrid>
+            </StackPanel>
+        </TabItem>
+    </TabControl>
+</dx:DXWindow>

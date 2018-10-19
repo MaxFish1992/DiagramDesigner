@@ -1,35 +1,1059 @@
-﻿<ResourceDictionary xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+<ResourceDictionary xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"  
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/charts"
+                    xmlns:ssw="clr-namespace:DiagramDesigner.Windows.SuspensionWD"
+                    xmlns:dxcore="http://schemas.devexpress.com/winfx/2008/xaml/core"
+                    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+                    xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking"
+                    xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
+                    xmlns:vm="clr-namespace:DiagramDesigner.ViewModel"
+                    xmlns:btn="clr-namespace:DiagramDesigner.CustomControls.Buttons"
+                    xmlns:lbl="clr-namespace:DiagramDesigner.CustomControls.Labels"
+                    xmlns:chart="clr-namespace:DiagramDesigner.CustomControls.Charts"
+                    xmlns:img="clr-namespace:DiagramDesigner.CustomControls.Images"
+                    xmlns:list="clr-namespace:DiagramDesigner.CustomControls.Lists"
+                    xmlns:wpf="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
+                    xmlns:cef="clr-namespace:CefSharp;assembly=CefSharp.Core"
+                    xmlns:lgd="clr-namespace:DiagramDesigner.CustomControls.Legends"
+                    xmlns:brs="clr-namespace:DiagramDesigner.CustomControls.Browsers"
+                    xmlns:cvt="clr-namespace:DiagramDesigner.Converters"
+                    xmlns:grid="clr-namespace:DiagramDesigner.CustomControls.DataGrids"
                     xmlns:local="clr-namespace:DiagramDesigner.CustomControls">
 
+    <Storyboard x:Key="Storyboard">
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="EndAngle" Storyboard.TargetName="TargetCircle">
+            <EasingDoubleKeyFrame KeyTime="0:0:4" Value="360"></EasingDoubleKeyFrame>
+        </DoubleAnimationUsingKeyFrames>
+    </Storyboard>
+    <!--转换器-->
+    <cvt:PercentToAngleConverter x:Key="PercentToAngleConverter"></cvt:PercentToAngleConverter>
 
-    <Style TargetType="{x:Type local:CustomControl1}">
+    <!--测试控件-->
+    <!--<Style TargetType="{x:Type local:CustomControl1}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:CustomControl1}">
-                    
-                        <Label FontSize="18" Foreground="Red" Content="{TemplateBinding Text}"></Label>
-                   
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
+    </Style>-->
 
     <Style TargetType="{x:Type local:CustomControl2}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:CustomControl2}">
                     <Grid Background="{TemplateBinding Background}">
-                        <Grid.RowDefinitions>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <Label Grid.Row="0" Content="{TemplateBinding GridName}"></Label>
-                        <dxg:GridControl Grid.Row="1" Width="100" Height="200">
+                        <dxg:GridControl Width="500" Height="200">
                             <dxg:GridColumn FieldName="{TemplateBinding ColumnName1}"></dxg:GridColumn>
                             <dxg:GridColumn FieldName="Length"></dxg:GridColumn>
                         </dxg:GridControl>
                     </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type local:PieChart_Diag}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:PieChart_Diag}">
+                    <Viewbox>
+                        <Grid>
+                            <!--<Grid.Background>
+            <ImageBrush ImageSource="../../../../Resources/Images/废污水排放量.png"></ImageBrush>
+        </Grid.Background>-->
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="40"></RowDefinition>
+                                <RowDefinition ></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition Width="220"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <!--边框-->
+                            <!--<Border x:Name="border" BorderBrush="#FF337274" BorderThickness="1"></Border>-->
+                            <Label Grid.Row="0" Content="废污水排放量" HorizontalAlignment="Center" VerticalAlignment="Bottom"></Label>
+                            <dxc:ChartControl  Grid.Row="1" Margin="-10 0 0 0" Background="{x:Null}" EnableAnimation="True" BorderThickness="0">
+                                <dxc:SimpleDiagram2D>
+                                    <dxc:PieSeries2D LabelsVisibility="False" HoleRadiusPercent="70">
+                                        <dxc:PieSeries2D.Points>
+                                            <dxc:SeriesPoint Argument="居民生活污水" Value="10" />
+                                            <dxc:SeriesPoint Argument="第二产业废水" Value="5" />
+                                            <dxc:SeriesPoint Argument="第三产业废水" Value="2" />
+                                        </dxc:PieSeries2D.Points>
+                                        <dxc:PieSeries2D.Model>
+                                            <dxc:BorderlessFlatPie2DModel></dxc:BorderlessFlatPie2DModel>
+                                        </dxc:PieSeries2D.Model>
+                                    </dxc:PieSeries2D>
+                                </dxc:SimpleDiagram2D>
+                                <dxc:ChartControl.Palette>
+                                    <dxc:Office2013Palette></dxc:Office2013Palette>
+                                </dxc:ChartControl.Palette>
+                            </dxc:ChartControl>
+                            <StackPanel Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal" Height="35">
+                                    <Ellipse Height="15" Width="15">
+                                        <Ellipse.Fill>
+                                            <SolidColorBrush Color="Red"/>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                    <Label Content="居民生活污水"></Label>
+                                    <Label Content="100"></Label>
+                                    <!--<Label Style="{StaticResource unitStyle}" Content="%"></Label>-->
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Height="35" Margin="0,15,0,0">
+                                    <Ellipse Height="15" Width="15">
+                                        <Ellipse.Fill>
+                                            <SolidColorBrush Color="Green"/>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                    <Label Content="第二产业废水"></Label>
+                                    <Label Content="100"></Label>
+                                    <!--<Label Style="{StaticResource unitStyle}" Content="%"></Label>-->
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Height="35" Margin="0,15,0,0">
+                                    <Ellipse Height="15" Width="15">
+                                        <Ellipse.Fill>
+                                            <SolidColorBrush Color="Blue"/>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                    <Label Content="第三产业废水"></Label>
+                                    <Label Content="100"></Label>
+                                    <!--<Label Style="{StaticResource unitStyle}" Content="%"></Label>-->
+                                </StackPanel>
+                            </StackPanel>
+                            <!--<Canvas>
+                            <Label x:Name="lblTotal" Canvas.Top="100" Canvas.Left="57" Content="100"></Label>
+                            <Label x:Name="lblUnit" Canvas.Top="133" Canvas.Left="80" Content="万吨"></Label>
+                        </Canvas>-->
+                        </Grid>
+                    </Viewbox>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type local:TextBox_Diag}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:TextBox_Diag}">
+                    <Viewbox>
+                        <Grid>
+                            <TextBox Text="{TemplateBinding Message}" FontSize="{TemplateBinding TextSize}" Foreground="{TemplateBinding TextColor}" VerticalAlignment="Center" HorizontalAlignment="Left" BorderThickness="0"></TextBox>
+                        </Grid>
+                    </Viewbox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type local:Button_Diag}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:Button_Diag}">
+                    <Border Background="{TemplateBinding BackColor}"
+                            CornerRadius="{TemplateBinding CornerSize}"
+                            BorderBrush="{TemplateBinding BorderColor}"
+                            BorderThickness="{TemplateBinding BorderSize}">
+                        <Label Content="{TemplateBinding Text}" FontSize="{TemplateBinding TextSize}" HorizontalContentAlignment="{TemplateBinding TextHorizontalAlignment}" VerticalContentAlignment="{TemplateBinding TextVerticalAlignment}" Foreground="{TemplateBinding TextColor}">
+                        </Label>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type ssw:DsSuspensionWD}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ssw:DsSuspensionWD}">
+                    <dxdo:DockLayoutManager Margin="5" x:Name="dockManager1" AutoHideExpandMode="MouseDown" >
+                        <dxdo:DockLayoutManager.AutoHideGroups>
+                            <dxdo:AutoHideGroup DockType="Bottom">
+                                <dxdo:LayoutPanel x:Name="paneFindResults" Caption="数据列表" ShowCloseButton="False" ShowControlBox="False" ShowMaximizeButton="False" 
+                                      ShowPinButton="False"  CaptionVerticalAlignment="Stretch" CaptionHorizontalAlignment="Stretch" 
+                                          TextWrapping="WrapWithOverflow"
+                                          AllowDockToDocumentGroup="False" CaptionWidth="150" ItemWidth="150"
+                                      AllowMaximize="False"
+                                      AllowFloat="False"
+                                      CaptionImageLocation="AfterText"
+                                      >
+                                    <Grid>
+                                        <TextBox Text="悬浮窗"></TextBox>
+                                    </Grid>
+                                </dxdo:LayoutPanel>
+                            </dxdo:AutoHideGroup>
+                        </dxdo:DockLayoutManager.AutoHideGroups>
+                    </dxdo:DockLayoutManager>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type local:Image_Diag}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:Image_Diag}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Height="{TemplateBinding Height}" 
+                            Width="{TemplateBinding Width}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Image Source="{TemplateBinding ImageUrl}"></Image>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type local:DataGrid_Diag}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:DataGrid_Diag}">
+                    <Viewbox>
+                        <DataGrid ItemsSource="{TemplateBinding TableSource}"></DataGrid>
+                    </Viewbox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--正式控件-->
+    <Style TargetType="{x:Type btn:BottomTxtImageBtn}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type btn:BottomTxtImageBtn}">
+                    <Viewbox>
+                        <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Cursor="Hand">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"></RowDefinition>
+                                <RowDefinition Height="30"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Image Grid.Row="0" Source="{TemplateBinding ImageUrl}" Height="{TemplateBinding ImageHeight}" Width="{TemplateBinding ImageWidth}"></Image>
+                            <Label Grid.Row="1" Content="{TemplateBinding Text}" FontFamily="{TemplateBinding TextFontFamily}" FontSize="{TemplateBinding TextSize}" Foreground="{TemplateBinding TextColor}" VerticalContentAlignment="{TemplateBinding TextVerticalAlignment}" HorizontalContentAlignment="{TemplateBinding TextHorizontalAlignment}" Margin="{TemplateBinding TextThickness}"></Label>
+                        </Grid>
+                    </Viewbox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type lbl:Label1}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type lbl:Label1}">
+                    <Viewbox>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0">
+                                <Label x:Name="Type" Content="{TemplateBinding Text}" FontFamily="{TemplateBinding TextFontFamily}" FontSize="{TemplateBinding TextSize}" Foreground="{TemplateBinding TextColor}" VerticalContentAlignment="{TemplateBinding TextVerticalAlignment}" HorizontalContentAlignment="{TemplateBinding TextHorizontalAlignment}" Margin="{TemplateBinding TextThickness}"></Label>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                <Label x:Name="Number" Content="{TemplateBinding Number}" FontFamily="{TemplateBinding NumberFontFamily}" FontSize="{TemplateBinding NumberSize}" Foreground="{TemplateBinding NumberColor}" VerticalContentAlignment="{TemplateBinding NumberVerticalAlignment}" HorizontalContentAlignment="{TemplateBinding NumberHorizontalAlignment}"></Label>
+                                <Label x:Name="Unit" Content="{TemplateBinding Unit}" FontFamily="{TemplateBinding UnitFontFamily}" FontSize="{TemplateBinding UnitSize}" Foreground="{TemplateBinding UnitColor}" VerticalContentAlignment="{TemplateBinding UnitVerticalAlignment}" HorizontalContentAlignment="{TemplateBinding UnitHorizontalAlignment}" Margin="3 7 0 0"></Label>
+                            </StackPanel>
+                        </Grid>
+                    </Viewbox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type lbl:ImageLabel}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type lbl:ImageLabel}">
+                    <Viewbox>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Image Grid.Row="1" Grid.Column="0" Source="{TemplateBinding ImageUrl}" Height="{TemplateBinding ImageHeight}" Width="{TemplateBinding ImageWidth}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 10 10"></Image>
+                            <StackPanel Grid.Row="0" Grid.Column="1">
+                                <Label x:Name="Type" Content="{TemplateBinding Text}" FontFamily="{TemplateBinding TextFontFamily}" FontSize="{TemplateBinding TextSize}" Foreground="{TemplateBinding TextColor}" VerticalContentAlignment="{TemplateBinding TextVerticalAlignment}" HorizontalContentAlignment="{TemplateBinding TextHorizontalAlignment}" Margin="0 15 0 0"></Label>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                                <Label x:Name="Number" Content="{TemplateBinding Number}" FontFamily="{TemplateBinding NumberFontFamily}" FontSize="{TemplateBinding NumberSize}" Foreground="{TemplateBinding NumberColor}" VerticalContentAlignment="{TemplateBinding NumberVerticalAlignment}" HorizontalContentAlignment="{TemplateBinding NumberHorizontalAlignment}"></Label>
+                                <Label x:Name="Unit" Content="{TemplateBinding Unit}" FontFamily="{TemplateBinding UnitFontFamily}" FontSize="{TemplateBinding UnitSize}" Foreground="{TemplateBinding UnitColor}" VerticalContentAlignment="{TemplateBinding UnitVerticalAlignment}" HorizontalContentAlignment="{TemplateBinding UnitHorizontalAlignment}" Margin="3 7 0 0"></Label>
+                            </StackPanel>
+                        </Grid>
+                    </Viewbox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type lbl:ImageOneLineLabel}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type lbl:ImageOneLineLabel}">
+                    <Viewbox>
+                        <Grid Width="600" Height="{TemplateBinding CrtlHeight}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                                <ColumnDefinition Width="9*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="1" BorderThickness="0 0 0 1" BorderBrush="#BFC8CE"></Border>
+                            <Image Grid.Column="0" Source="{TemplateBinding ImageUrl}" Height="{TemplateBinding ImageHeight}" Width="{TemplateBinding ImageWidth}"></Image>
+                            <Label Grid.Column="1" Content="{TemplateBinding Text}" FontFamily="{TemplateBinding TextFontFamily}" FontSize="{TemplateBinding TextSize}" Foreground="{TemplateBinding TextColor}" VerticalContentAlignment="{TemplateBinding TextVerticalAlignment}" HorizontalContentAlignment="{TemplateBinding TextHorizontalAlignment}"></Label>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Label Content="{TemplateBinding Status}" FontFamily="{TemplateBinding StatusFontFamily}" FontSize="{TemplateBinding StatusSize}" Foreground="{TemplateBinding StatusColor}" VerticalContentAlignment="{TemplateBinding StatusVerticalAlignment}" HorizontalContentAlignment="{TemplateBinding StatusHorizontalAlignment}" Margin="0 0 5 0"></Label>
+                                <Label Content="{TemplateBinding Unit}" FontFamily="{TemplateBinding UnitFontFamily}" FontSize="{TemplateBinding UnitSize}" Foreground="{TemplateBinding UnitColor}" VerticalContentAlignment="{TemplateBinding UnitVerticalAlignment}" HorizontalContentAlignment="{TemplateBinding UnitHorizontalAlignment}"></Label>
+                            </StackPanel>
+                        </Grid>
+                    </Viewbox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type btn:CenterTxtImageBtn}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type btn:CenterTxtImageBtn}">
+                    <Viewbox>
+                        <Grid Height="100" Width="100">
+                            <Grid.Background>
+                                <ImageBrush ImageSource="../Resources/Pictures/preview.png"></ImageBrush>
+                            </Grid.Background>
+                            <TextBlock x:Name="TextBlock" Foreground="{TemplateBinding TextColor}" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap">
+                                    <Label Foreground="{Binding Path=Foreground,ElementName=TextBlock}">交通</Label>
+                                    <LineBreak></LineBreak>
+                                    <Label Foreground="{Binding Path=Foreground,ElementName=TextBlock}">体系</Label>
+                            </TextBlock>
+                        </Grid>
+                    </Viewbox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type lbl:LabelCommon}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type lbl:LabelCommon}">
+                    <Viewbox>
+                        <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <Label Content="{TemplateBinding Text}" FontFamily="{TemplateBinding TextFontFamily}" FontSize="{TemplateBinding TextSize}" Foreground="{TemplateBinding TextColor}" VerticalContentAlignment="{TemplateBinding TextVerticalAlignment}" HorizontalContentAlignment="{TemplateBinding TextHorizontalAlignment}" FontWeight="{TemplateBinding TextWeight}"></Label>
+                        </Border>
+                    </Viewbox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type chart:StackedSplineAreaChart}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type chart:StackedSplineAreaChart}">
+                    <Viewbox>
+                        <Grid>
+                            <Grid.DataContext>
+                                <chart:StackedAreaViewModel></chart:StackedAreaViewModel>
+                            </Grid.DataContext>
+                            <dxc:ChartControl Width="700" Background="{x:Null}" DataSource="{Binding DataTable}">
+                                <dxc:ChartControl.Diagram>
+                                    <dxc:XYDiagram2D>
+                                        <dxc:XYDiagram2D.Series>
+                                            <dxc:SplineAreaStackedSeries2D DisplayName="2004" LineTension="0.8"
+                                                       Transparency="0.4" ArgumentDataMember="Argument" ValueDataMember="Value" Brush="{TemplateBinding ChartColor}">
+
+                                                <!--<dxc:SplineAreaStackedSeries2D.Points>
+                                                    <dxc:SeriesPoint Argument="Illinois" Value="528.904" />
+                                                    <dxc:SeriesPoint Argument="Indiana" Value="227.271" />
+                                                    <dxc:SeriesPoint Argument="Michigan" Value="372.576" />
+                                                    <dxc:SeriesPoint Argument="Ohio" Value="418.258" />
+                                                    <dxc:SeriesPoint Argument="Wisconsin" Value="211.727" />
+                                                </dxc:SplineAreaStackedSeries2D.Points>-->
+                                                <!--<dxc:SplineAreaStackedSeries2D.Label>
+                                <dxc:SeriesLabel Visible="True" dxc:MarkerSeries2D.Angle="40" />
+                            </dxc:SplineAreaStackedSeries2D.Label>-->
+                                            </dxc:SplineAreaStackedSeries2D>
+
+                                        </dxc:XYDiagram2D.Series>
+                                        <dxc:XYDiagram2D.DefaultPane>
+                                            <dxc:Pane DomainBrush="Transparent" DomainBorderBrush="Transparent" Background="Transparent"></dxc:Pane>
+                                        </dxc:XYDiagram2D.DefaultPane>
+                                        <dxc:XYDiagram2D.AxisX>
+                                            <dxc:AxisX2D FlowDirection="RightToLeft" TickmarksMinorVisible="False" Brush="#0066AE" GridLinesVisible="True" Thickness="1" GridLinesBrush="#115789"
+                        Interlaced="False" TickmarksVisible="False">
+                                                <dxc:AxisX2D.Label>
+                                                    <dxc:AxisLabel Foreground="{TemplateBinding XColor}" FontSize="18"/>
+                                                </dxc:AxisX2D.Label>
+                                                <!--<dxc:AxisX2D.WholeRange>
+                                <dxc:Range SideMarginsValue="0" />
+                            </dxc:AxisX2D.WholeRange>-->
+                                            </dxc:AxisX2D>
+                                        </dxc:XYDiagram2D.AxisX>
+                                        <dxc:XYDiagram2D.AxisY>
+                                            <dxc:AxisY2D TickmarksVisible="False" TickmarksMinorVisible="False" Reverse="False" Thickness="0" Logarithmic="False"  Brush="#0066AE" TickmarksCrossAxis="False">
+                                                <dxc:AxisY2D.Label>
+                                                    <dxc:AxisLabel Foreground="{TemplateBinding YColor}" FontSize="18"/>
+                                                </dxc:AxisY2D.Label>
+                                                <!--<dxc:AxisY2D.Title>
+                                <dxc:AxisTitle Content="Millions of Dollars" />
+                            </dxc:AxisY2D.Title>-->
+                                            </dxc:AxisY2D>
+                                        </dxc:XYDiagram2D.AxisY>
+                                    </dxc:XYDiagram2D>
+                                </dxc:ChartControl.Diagram>
+                                <!--<dxc:ChartControl.Legend>
+                <dxc:Legend HorizontalPosition="Right" />
+            </dxc:ChartControl.Legend>-->
+                                <!--<dxc:ChartControl.Titles>
+                <dxc:Title Dock="Top" HorizontalAlignment="Center">Great Lakes Gross State Product
+                </dxc:Title>
+            </dxc:ChartControl.Titles>-->
+                            </dxc:ChartControl>
+                        </Grid>
+                    </Viewbox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type btn:CommonButton}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type btn:CommonButton}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Label Content="{TemplateBinding Text}" Foreground="{TemplateBinding TextColor}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="{TemplateBinding TextSize}" FontFamily="{TemplateBinding TextFontFamily}"></Label>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type lbl:BackTwoLineLabel}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type lbl:BackTwoLineLabel}">
+                    <Viewbox>
+                        <Grid Height="100" Width="300">
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Image Grid.RowSpan="2" Source="{TemplateBinding ImageUrl}" Stretch="Fill"></Image>
+                            <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+                                <Label Content="进场车辆:" FontSize="18" Margin="0 5 5 0" Foreground="{DynamicResource FontColor}"></Label>
+                                <Label Content="19" FontSize="24" Foreground="#31FC00"></Label>
+                                <Label Content="辆/分" Margin="5 10 0 0" Foreground="{DynamicResource FontColor}"></Label>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Label Content="进场车辆:" FontSize="18" Margin="0 5 5 0" Foreground="{DynamicResource FontColor}"></Label>
+                                <Label Content="20" FontSize="24" VerticalAlignment="Top" Foreground="#00A8FF"></Label>
+                                <Label Content="辆/分" Margin="5 10 0 0" Foreground="{DynamicResource FontColor}"></Label>
+                            </StackPanel>
+                        </Grid>
+                    </Viewbox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type img:ImageCommon}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type img:ImageCommon}">
+                    <Image Source="{TemplateBinding ImageUrl}" Height="{TemplateBinding ImageHeight}" Width="{TemplateBinding ImageWidth}"></Image>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type chart:CircleNumberChart}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type chart:CircleNumberChart}">
+                    <Viewbox VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                        <Grid>
+                            <!--底图圆形-->
+                            <ed:Arc x:Name="BackCircle" ArcThickness="{TemplateBinding LineThickness}" ArcThicknessUnit="Pixel" EndAngle="360" Height="120" Width="120" StartAngle="0" Fill="{TemplateBinding BackColor}">
+                                <ed:Arc.RenderTransform>
+                                    <TransformGroup>
+                                        <TranslateTransform X="-120"></TranslateTransform>
+                                        <ScaleTransform ScaleX="-1" ScaleY="1"></ScaleTransform>
+                                        <SkewTransform AngleY="0" AngleX="0"></SkewTransform>
+                                        <RotateTransform Angle="0"></RotateTransform>
+                                    </TransformGroup>
+                                </ed:Arc.RenderTransform>
+                            </ed:Arc>
+                            <!--需要绘制的图形-->
+                            <ed:Arc x:Name="TargetCircle" ArcThickness="{TemplateBinding LineThickness}" ArcThicknessUnit="Pixel" EndAngle="{TemplateBinding DrawAngle, Converter={StaticResource PercentToAngleConverter}}" Height="120" Width="120" Margin="0" Stretch="None" StartAngle="0" Fill="{TemplateBinding ForeColor}">
+                                <ed:Arc.RenderTransform>
+                                    <TransformGroup>
+                                        <TranslateTransform X="-120"></TranslateTransform>
+                                        <ScaleTransform ScaleX="-1" ScaleY="1"></ScaleTransform>
+                                        <SkewTransform AngleY="0" AngleX="0"></SkewTransform>
+                                        <RotateTransform Angle="0"></RotateTransform>
+                                    </TransformGroup>
+                                </ed:Arc.RenderTransform>
+                            </ed:Arc>
+                            <!--数据-->
+                            <Label Content="{TemplateBinding Number}" Foreground="{TemplateBinding NumberColor}" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
+                            <Label Content="{TemplateBinding Unit}" Foreground="{TemplateBinding UnitColor}" FontSize="16" Margin="0 100 0 0" HorizontalAlignment="Center"></Label>
+                            <Label Content="{TemplateBinding TypeName}" Foreground="{TemplateBinding TypeNameColor}" FontSize="20"  HorizontalAlignment="Center" Margin="0 150 0 0"></Label>
+                        </Grid>
+                    </Viewbox>
+                    <ControlTemplate.Triggers>
+                        <!--<EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                            <BeginStoryboard Storyboard="{StaticResource Storyboard}"></BeginStoryboard>
+                        </EventTrigger>-->
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type chart:DoubleHisChart}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type chart:DoubleHisChart}">
+                    <Viewbox>
+                        <Grid Background="Transparent" Width="800" Height="600" DataContext="{TemplateBinding ChartViewModel}">
+                            <!--柱状图-->
+                            <dxc:ChartControl x:Name="chart" Grid.Row="2" Background="{x:Null}" BorderThickness="0" HorizontalAlignment="Left" FontSize="16" DataSource="{Binding DataTable}">
+                                <dxc:ChartControl.Palette>
+                                    <dxc:DXChartsPalette></dxc:DXChartsPalette>
+                                </dxc:ChartControl.Palette>
+
+                                <dxc:XYDiagram2D BarDistance="0.05" Rotated="{TemplateBinding IsRotated}">
+
+                                    <dxc:XYDiagram2D.AxisX>
+                                        <dxc:AxisX2D TickmarksVisible="False" TickmarksMinorVisible="False" Reverse="False" Logarithmic="False"  Brush="#0066AE" TickmarksCrossAxis="False">
+                                            <dxc:AxisX2D.Label>
+                                                <dxc:AxisLabel Foreground="{TemplateBinding XColor}" FontSize="18"/>
+                                            </dxc:AxisX2D.Label>
+                                        </dxc:AxisX2D>
+                                    </dxc:XYDiagram2D.AxisX>
+
+                                    <dxc:XYDiagram2D.AxisY>
+                                        <dxc:AxisY2D FlowDirection="RightToLeft" TickmarksMinorVisible="False" Thickness="0" Brush="#0066AE" GridLinesVisible="False" GridLinesBrush="#115789"
+                        Interlaced="False" TickmarksVisible="False">
+                                            <dxc:AxisY2D.Label>
+                                                <dxc:AxisLabel Foreground="{TemplateBinding YColor}" FontSize="18"/>
+                                            </dxc:AxisY2D.Label>
+                                            <!--<dxc:AxisY2D.CustomLabels>
+                            <dxc:CustomAxisLabel Content="0" Value="0"/>
+                            <dxc:CustomAxisLabel Content="5" Value="5"/>
+                            <dxc:CustomAxisLabel Content="10" Value="10"/>
+                            <dxc:CustomAxisLabel Content="16" Value="16"/>
+                        </dxc:AxisY2D.CustomLabels>-->
+                                        </dxc:AxisY2D>
+                                    </dxc:XYDiagram2D.AxisY>
+
+                                    <dxc:XYDiagram2D.DefaultPane>
+                                        <dxc:Pane DomainBrush="Transparent" DomainBorderBrush="Transparent"></dxc:Pane>
+                                    </dxc:XYDiagram2D.DefaultPane>
+                                    <dxc:BarSideBySideSeries2D Brush="{TemplateBinding ChartColor1}" BarWidth="0.2" CrosshairLabelPattern="{}{S} : {V} 个" DisplayName="{TemplateBinding DisplayName}" ArgumentDataMember="Argument" ValueDataMember="Value1">
+
+                                        <dxc:BarSideBySideSeries2D.Model>
+                                            <dxc:BorderlessSimpleBar2DModel/>
+                                        </dxc:BarSideBySideSeries2D.Model>
+
+                                        <dxc:BarSideBySideSeries2D.Label>
+                                            <dxc:SeriesLabel Indent="10" ResolveOverlappingMode="Default"
+                                    ConnectorThickness="1"
+                                    Visible="False"
+                                    dxc:BarSideBySideSeries2D.LabelPosition="Outside"/>
+                                        </dxc:BarSideBySideSeries2D.Label>
+
+                                        <!--<dxc:BarSideBySideSeries2D.Points>
+                                            <dxc:SeriesPoint Argument="Illinois" Value="420" />
+                                            <dxc:SeriesPoint Argument="Indiana" Value="170" />
+                                            <dxc:SeriesPoint Argument="Michigan" Value="300" />
+                                            <dxc:SeriesPoint Argument="Ohio" Value="347" />
+                                            <dxc:SeriesPoint Argument="Wisconsin" Value="169" />
+                                        </dxc:BarSideBySideSeries2D.Points>-->
+                                    </dxc:BarSideBySideSeries2D>
+
+                                    <dxc:BarSideBySideSeries2D Brush="{TemplateBinding ChartColor2}" BarWidth="0.2" CrosshairLabelPattern="{}{S} : {V} 个" DisplayName="{TemplateBinding DisplayName}" ArgumentDataMember="Argument" ValueDataMember="Value2">
+
+                                        <dxc:BarSideBySideSeries2D.Model>
+                                            <dxc:BorderlessSimpleBar2DModel/>
+                                        </dxc:BarSideBySideSeries2D.Model>
+
+                                        <dxc:BarSideBySideSeries2D.Label>
+                                            <dxc:SeriesLabel Indent="10" ResolveOverlappingMode="Default"
+                                    ConnectorThickness="1"
+                                    Visible="False"
+                                    dxc:BarSideBySideSeries2D.LabelPosition="Outside"/>
+                                        </dxc:BarSideBySideSeries2D.Label>
+
+                                        <!--<dxc:BarSideBySideSeries2D.Points>
+                                            <dxc:SeriesPoint Argument="Illinois" Value="423.721" />
+                                            <dxc:SeriesPoint Argument="Indiana" Value="178.719" />
+                                            <dxc:SeriesPoint Argument="Michigan" Value="308.845" />
+                                            <dxc:SeriesPoint Argument="Ohio" Value="348.555" />
+                                            <dxc:SeriesPoint Argument="Wisconsin" Value="160.274" />
+                                        </dxc:BarSideBySideSeries2D.Points>-->
+                                    </dxc:BarSideBySideSeries2D>
+                                </dxc:XYDiagram2D>
+                            </dxc:ChartControl>
+                        </Grid>
+                    </Viewbox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type chart:HisAndAreaChart}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type chart:HisAndAreaChart}">
+                    <Viewbox>
+                        <Grid Background="Transparent" Width="700">
+                            <!--柱状图-->
+                            <dxc:ChartControl x:Name="chart" Grid.Row="2" Background="{x:Null}" BorderThickness="0" HorizontalAlignment="Left" FontSize="16" DataSource="{TemplateBinding ChartSource}">
+                                <dxc:ChartControl.Palette>
+                                    <dxc:DXChartsPalette></dxc:DXChartsPalette>
+                                </dxc:ChartControl.Palette>
+
+                                <dxc:XYDiagram2D BarDistance="0.05" Rotated="True">
+
+                                    <dxc:XYDiagram2D.AxisX>
+                                        <dxc:AxisX2D TickmarksVisible="False" TickmarksMinorVisible="False" Reverse="False" Logarithmic="False"  Brush="#0066AE" TickmarksCrossAxis="False">
+                                            <dxc:AxisX2D.Label>
+                                                <dxc:AxisLabel Foreground="{TemplateBinding XColor}" FontSize="18"/>
+                                            </dxc:AxisX2D.Label>
+                                        </dxc:AxisX2D>
+                                    </dxc:XYDiagram2D.AxisX>
+
+                                    <dxc:XYDiagram2D.AxisY>
+                                        <dxc:AxisY2D FlowDirection="RightToLeft" TickmarksMinorVisible="False" Thickness="0" Brush="#0066AE" GridLinesVisible="False" GridLinesBrush="#115789"
+                        Interlaced="False" TickmarksVisible="False">
+                                            <dxc:AxisY2D.Label>
+                                                <dxc:AxisLabel Foreground="{TemplateBinding YColor}" FontSize="18"/>
+                                            </dxc:AxisY2D.Label>
+                                            <!--<dxc:AxisY2D.CustomLabels>
+                            <dxc:CustomAxisLabel Content="0" Value="0"/>
+                            <dxc:CustomAxisLabel Content="5" Value="5"/>
+                            <dxc:CustomAxisLabel Content="10" Value="10"/>
+                            <dxc:CustomAxisLabel Content="16" Value="16"/>
+                        </dxc:AxisY2D.CustomLabels>-->
+                                        </dxc:AxisY2D>
+                                    </dxc:XYDiagram2D.AxisY>
+
+                                    <dxc:XYDiagram2D.DefaultPane>
+                                        <dxc:Pane DomainBrush="Transparent" DomainBorderBrush="Transparent"></dxc:Pane>
+                                    </dxc:XYDiagram2D.DefaultPane>
+
+                                    <dxc:BarSideBySideSeries2D Brush="{TemplateBinding ChartColor}" BarWidth="0.2" CrosshairLabelPattern="{}{S} : {V} 个" DisplayName="{TemplateBinding DisplayName}">
+
+                                        <dxc:BarSideBySideSeries2D.Model>
+                                            <dxc:BorderlessSimpleBar2DModel/>
+                                        </dxc:BarSideBySideSeries2D.Model>
+
+                                        <dxc:BarSideBySideSeries2D.Label>
+                                            <dxc:SeriesLabel Indent="10" ResolveOverlappingMode="Default"
+                                    ConnectorThickness="1"
+                                    Visible="False"
+                                    dxc:BarSideBySideSeries2D.LabelPosition="Outside"/>
+                                        </dxc:BarSideBySideSeries2D.Label>
+
+                                        <dxc:BarSideBySideSeries2D.Points>
+                                            <dxc:SeriesPoint Argument="Illinois" Value="420" />
+                                            <dxc:SeriesPoint Argument="Indiana" Value="170" />
+                                            <dxc:SeriesPoint Argument="Michigan" Value="300" />
+                                            <dxc:SeriesPoint Argument="Ohio" Value="347" />
+                                            <dxc:SeriesPoint Argument="Wisconsin" Value="169" />
+                                        </dxc:BarSideBySideSeries2D.Points>
+                                    </dxc:BarSideBySideSeries2D>
+                                    <!--面状图-->
+                                    <dxc:SplineAreaStackedSeries2D DisplayName="2004" LineTension="0.8"
+                                                       Transparency="0.4" Brush="{TemplateBinding AreaColor}">
+
+                                        <dxc:SplineAreaStackedSeries2D.Points>
+                                            <dxc:SeriesPoint Argument="Illinois" Value="528.904" />
+                                            <dxc:SeriesPoint Argument="Indiana" Value="227.271" />
+                                            <dxc:SeriesPoint Argument="Michigan" Value="372.576" />
+                                            <dxc:SeriesPoint Argument="Ohio" Value="418.258" />
+                                            <dxc:SeriesPoint Argument="Wisconsin" Value="211.727" />
+                                        </dxc:SplineAreaStackedSeries2D.Points>
+                                        <!--<dxc:SplineAreaStackedSeries2D.Label>
+                                <dxc:SeriesLabel Visible="True" dxc:MarkerSeries2D.Angle="40" />
+                            </dxc:SplineAreaStackedSeries2D.Label>-->
+                                    </dxc:SplineAreaStackedSeries2D>
+                                    
+                                </dxc:XYDiagram2D>
+                            </dxc:ChartControl>
+                        </Grid>
+                    </Viewbox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type brs:CefSharpBrowser}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type brs:CefSharpBrowser}">
+                    <wpf:ChromiumWebBrowser Address="{TemplateBinding Url}"></wpf:ChromiumWebBrowser>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type chart:ThreeStackedAreaChart}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type chart:ThreeStackedAreaChart}">
+                    <Viewbox>
+                        <Grid>
+                            <Grid.DataContext>
+                                <chart:ThreeStackedAreaViewModel></chart:ThreeStackedAreaViewModel>
+                            </Grid.DataContext>
+                            <dxc:ChartControl Width="800" Background="{x:Null}" DataSource="{Binding DataTable}">
+                                <dxc:ChartControl.Diagram>
+                                    <dxc:XYDiagram2D>
+                                        <dxc:XYDiagram2D.Series>
+
+                                            <dxc:AreaSeries2D DisplayName="2004"
+                                                       Transparency="0.6" ArgumentDataMember="Argument" ValueDataMember="Value1" Brush="{TemplateBinding AreaColor1}">
+
+                                                <!--<dxc:SplineAreaStackedSeries2D.Points>
+                                                    <dxc:SeriesPoint Argument="Illinois" Value="528.904" />
+                                                    <dxc:SeriesPoint Argument="Indiana" Value="227.271" />
+                                                    <dxc:SeriesPoint Argument="Michigan" Value="372.576" />
+                                                    <dxc:SeriesPoint Argument="Ohio" Value="418.258" />
+                                                    <dxc:SeriesPoint Argument="Wisconsin" Value="211.727" />
+                                                </dxc:SplineAreaStackedSeries2D.Points>-->
+                                                <!--<dxc:SplineAreaStackedSeries2D.Label>
+                                <dxc:SeriesLabel Visible="True" dxc:MarkerSeries2D.Angle="40" />
+                            </dxc:SplineAreaStackedSeries2D.Label>-->
+                                            </dxc:AreaSeries2D>
+
+                                            <dxc:AreaSeries2D DisplayName="2005"
+                                                       Transparency="0.6" ArgumentDataMember="Argument" ValueDataMember="Value2" Brush="{TemplateBinding AreaColor2}">
+
+                                                <!--<dxc:SplineAreaStackedSeries2D.Points>
+                                                    <dxc:SeriesPoint Argument="Illinois" Value="522" />
+                                                    <dxc:SeriesPoint Argument="Indiana" Value="229" />
+                                                    <dxc:SeriesPoint Argument="Michigan" Value="353" />
+                                                    <dxc:SeriesPoint Argument="Ohio" Value="400" />
+                                                    <dxc:SeriesPoint Argument="Wisconsin" Value="200" />
+                                                </dxc:SplineAreaStackedSeries2D.Points>-->
+                                                <!--<dxc:SplineAreaStackedSeries2D.Label>
+                                <dxc:SeriesLabel Visible="True" dxc:MarkerSeries2D.Angle="40" />
+                            </dxc:SplineAreaStackedSeries2D.Label>-->
+                                            </dxc:AreaSeries2D>
+
+                                            <dxc:AreaSeries2D DisplayName="2006"
+                                                       Transparency="0.6" ArgumentDataMember="Argument" ValueDataMember="Value3" Brush="{TemplateBinding AreaColor3}">
+
+                                                <!--<dxc:SplineAreaStackedSeries2D.Points>
+                                                    <dxc:SeriesPoint Argument="Illinois" Value="520" />
+                                                    <dxc:SeriesPoint Argument="Indiana" Value="220" />
+                                                    <dxc:SeriesPoint Argument="Michigan" Value="370" />
+                                                    <dxc:SeriesPoint Argument="Ohio" Value="410" />
+                                                    <dxc:SeriesPoint Argument="Wisconsin" Value="210" />
+                                                </dxc:SplineAreaStackedSeries2D.Points>-->
+                                                <!--<dxc:SplineAreaStackedSeries2D.Label>
+                                <dxc:SeriesLabel Visible="True" dxc:MarkerSeries2D.Angle="40" />
+                            </dxc:SplineAreaStackedSeries2D.Label>-->
+                                            </dxc:AreaSeries2D>
+
+                                        </dxc:XYDiagram2D.Series>
+                                        <dxc:XYDiagram2D.DefaultPane>
+                                            <dxc:Pane DomainBrush="Transparent" DomainBorderBrush="Transparent" Background="Transparent"></dxc:Pane>
+                                        </dxc:XYDiagram2D.DefaultPane>
+                                        <dxc:XYDiagram2D.AxisX>
+                                            <dxc:AxisX2D FlowDirection="RightToLeft" TickmarksMinorVisible="False" Brush="#0066AE" GridLinesVisible="True" Thickness="1" GridLinesBrush="#115789"
+                        Interlaced="False" TickmarksVisible="False">
+                                                <dxc:AxisX2D.Label>
+                                                    <dxc:AxisLabel Foreground="{TemplateBinding XColor}" FontSize="18"/>
+                                                </dxc:AxisX2D.Label>
+                                                <!--<dxc:AxisX2D.WholeRange>
+                                <dxc:Range SideMarginsValue="0" />
+                            </dxc:AxisX2D.WholeRange>-->
+                                            </dxc:AxisX2D>
+                                        </dxc:XYDiagram2D.AxisX>
+                                        <dxc:XYDiagram2D.AxisY>
+                                            <dxc:AxisY2D TickmarksVisible="False" TickmarksMinorVisible="False" Reverse="False" Thickness="0" Logarithmic="False"  Brush="#0066AE" TickmarksCrossAxis="False">
+                                                <dxc:AxisY2D.Label>
+                                                    <dxc:AxisLabel Foreground="{TemplateBinding YColor}" FontSize="18"/>
+                                                </dxc:AxisY2D.Label>
+                                                <!--<dxc:AxisY2D.Title>
+                                <dxc:AxisTitle Content="Millions of Dollars" />
+                            </dxc:AxisY2D.Title>-->
+                                            </dxc:AxisY2D>
+                                        </dxc:XYDiagram2D.AxisY>
+                                    </dxc:XYDiagram2D>
+                                </dxc:ChartControl.Diagram>
+                                <!--<dxc:ChartControl.Legend>
+                <dxc:Legend HorizontalPosition="Right" />
+            </dxc:ChartControl.Legend>-->
+                                <!--<dxc:ChartControl.Titles>
+                <dxc:Title Dock="Top" HorizontalAlignment="Center">Great Lakes Gross State Product
+                </dxc:Title>
+            </dxc:ChartControl.Titles>-->
+                            </dxc:ChartControl>
+                        </Grid>
+                    </Viewbox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type lgd:LineTxtLegend}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type lgd:LineTxtLegend}">
+                    <Viewbox>
+                        <StackPanel Orientation="Horizontal">
+                            <Path Stroke="{TemplateBinding Color}" StrokeThickness="{TemplateBinding LineThickness}">
+                                <Path.Data>
+                                    <PathGeometry>
+                                        <PathFigure StartPoint="5,12">
+                                            <LineSegment Point="20,12"></LineSegment>
+                                        </PathFigure>
+                                    </PathGeometry>
+                                </Path.Data>
+                            </Path>
+                            <Label Content="{TemplateBinding Text}" Foreground="{DynamicResource FontColor}" FontSize="14"></Label>
+                        </StackPanel>
+                    </Viewbox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type chart:SingleHisChart}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type chart:SingleHisChart}">
+                    <Viewbox>
+                        <Grid x:Name="Grid" Background="Transparent" Width="700" DataContext="{TemplateBinding ChartViewModel}">
+                            <!--柱状图-->
+                            <dxc:ChartControl x:Name="chart" Grid.Row="2" Background="{x:Null}" BorderThickness="0" HorizontalAlignment="Left" FontSize="16" DataSource="{Binding DataTable}">
+                                <dxc:ChartControl.Palette>
+                                    <dxc:DXChartsPalette></dxc:DXChartsPalette>
+                                </dxc:ChartControl.Palette>
+
+                                <dxc:XYDiagram2D BarDistance="0.05">
+
+                                    <dxc:XYDiagram2D.AxisX>
+                                        <dxc:AxisX2D TickmarksVisible="False" TickmarksMinorVisible="False" Reverse="False" Logarithmic="False"  Brush="#0066AE" TickmarksCrossAxis="False">
+                                            <dxc:AxisX2D.Label>
+                                                <dxc:AxisLabel Foreground="{TemplateBinding XColor}" FontSize="18"/>
+                                            </dxc:AxisX2D.Label>
+                                        </dxc:AxisX2D>
+                                    </dxc:XYDiagram2D.AxisX>
+
+                                    <dxc:XYDiagram2D.AxisY>
+                                        <dxc:AxisY2D FlowDirection="RightToLeft" TickmarksMinorVisible="False" Thickness="0" Brush="#0066AE" GridLinesVisible="False" GridLinesBrush="#115789"
+                        Interlaced="False" TickmarksVisible="False">
+                                            <dxc:AxisY2D.Label>
+                                                <dxc:AxisLabel Foreground="{TemplateBinding YColor}" FontSize="18"/>
+                                            </dxc:AxisY2D.Label>
+                                            <!--<dxc:AxisY2D.CustomLabels>
+                            <dxc:CustomAxisLabel Content="0" Value="0"/>
+                            <dxc:CustomAxisLabel Content="5" Value="5"/>
+                            <dxc:CustomAxisLabel Content="10" Value="10"/>
+                            <dxc:CustomAxisLabel Content="16" Value="16"/>
+                        </dxc:AxisY2D.CustomLabels>-->
+                                        </dxc:AxisY2D>
+                                    </dxc:XYDiagram2D.AxisY>
+
+                                    <dxc:XYDiagram2D.DefaultPane>
+                                        <dxc:Pane DomainBrush="Transparent" DomainBorderBrush="Transparent"></dxc:Pane>
+                                    </dxc:XYDiagram2D.DefaultPane>
+                                    <dxc:BarSideBySideSeries2D x:Name="month4Chart" Brush="{TemplateBinding ChartColor}" BarWidth="0.2" CrosshairLabelPattern="{}{S} : {V} 个" DisplayName="{TemplateBinding DisplayName}" ArgumentDataMember="Argument" ValueDataMember="Value">
+
+                                        <dxc:BarSideBySideSeries2D.Model>
+                                            <dxc:BorderlessSimpleBar2DModel/>
+                                        </dxc:BarSideBySideSeries2D.Model>
+
+                                        <dxc:BarSideBySideSeries2D.Label>
+                                            <dxc:SeriesLabel Indent="10" ResolveOverlappingMode="Default"
+                                    ConnectorThickness="1"
+                                    Visible="False"
+                                    dxc:BarSideBySideSeries2D.LabelPosition="Outside"/>
+                                        </dxc:BarSideBySideSeries2D.Label>
+
+                                        <!--<dxc:BarSideBySideSeries2D.Points>
+                                            <dxc:SeriesPoint Argument="Illinois" Value="423.721" />
+                                            <dxc:SeriesPoint Argument="Indiana" Value="178.719" />
+                                            <dxc:SeriesPoint Argument="Michigan" Value="308.845" />
+                                            <dxc:SeriesPoint Argument="Ohio" Value="348.555" />
+                                            <dxc:SeriesPoint Argument="Wisconsin" Value="160.274" />
+                                        </dxc:BarSideBySideSeries2D.Points>-->
+                                    </dxc:BarSideBySideSeries2D>
+                                </dxc:XYDiagram2D>
+                            </dxc:ChartControl>
+                        </Grid>
+                    </Viewbox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type chart:SingleLineChart}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type chart:SingleLineChart}">
+                    <Viewbox>
+                        <dxc:ChartControl HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Background="Transparent">
+                            <dxc:XYDiagram2D  LabelsResolveOverlappingMinIndent="2" x:Name="diagram1" EnableAxisXNavigation="True" Background="Transparent">
+                                <dxc:XYDiagram2D.DefaultPane>
+                                    <dxc:Pane DomainBrush="Transparent" Foreground="{DynamicResource FontColor}" DomainBorderBrush="Transparent"/>
+                                </dxc:XYDiagram2D.DefaultPane>
+                                <dxc:XYDiagram2D.AxisX>
+                                    <dxc:AxisX2D TickmarksVisible="False" TickmarksMinorVisible="False" Reverse="False" Brush="#0066AE" Thickness="1" Logarithmic="False" TickmarksCrossAxis="False" Foreground="#add2ea">
+                                        <dxc:AxisX2D.Label>
+                                            <dxc:AxisLabel Foreground="{DynamicResource FontColor}" FontSize="18"/>
+                                        </dxc:AxisX2D.Label>
+                                        <!--<dxc:AxisX2D.CustomLabels>
+                            <dxc:CustomAxisLabel Content="2013" Value="2013"/>
+                            <dxc:CustomAxisLabel Content="2014" Value="2014"/>
+                            <dxc:CustomAxisLabel Content="2015" Value="2015"/>
+                             <dxc:CustomAxisLabel Content="2016" Value="2016"/>
+                            <dxc:CustomAxisLabel Content="2017" Value="2017"/>
+                        </dxc:AxisX2D.CustomLabels>-->
+                                    </dxc:AxisX2D>
+                                </dxc:XYDiagram2D.AxisX>
+
+                                <dxc:XYDiagram2D.AxisY>
+                                    <dxc:AxisY2D x:Name="axisY2D" TickmarksMinorVisible="False" Brush="#0066AE" Thickness="1" GridLinesVisible="True" GridLinesBrush="#115789"
+                        Interlaced="False" TickmarksVisible="False">
+                                        <dxc:AxisY2D.Label>
+                                            <dxc:AxisLabel Foreground="{DynamicResource FontColor}" FontSize="18"/>
+                                        </dxc:AxisY2D.Label>
+                                    </dxc:AxisY2D>
+                                </dxc:XYDiagram2D.AxisY>
+
+                                <dxc:LineSeries2D MarkerVisible="False" LabelsVisibility="True" DisplayName="图例" Background="Transparent">
+                                    <dxc:LineSeries2D.LineStyle>
+                                        <dxc:LineStyle Thickness="1" />
+                                    </dxc:LineSeries2D.LineStyle>
+                                    <dxc:LineSeries2D.Points>
+                                        <dxc:SeriesPoint Argument="2015" Value="5"></dxc:SeriesPoint>
+                                        <dxc:SeriesPoint Argument="2016" Value="4"></dxc:SeriesPoint>
+                                        <dxc:SeriesPoint Argument="2017" Value="6"></dxc:SeriesPoint>
+                                        <dxc:SeriesPoint Argument="2018" Value="3"></dxc:SeriesPoint>
+                                    </dxc:LineSeries2D.Points>
+                                </dxc:LineSeries2D>
+                            </dxc:XYDiagram2D>
+                            <dxc:ChartControl.Titles>
+                                <dxc:Title Content="标题"></dxc:Title>
+                            </dxc:ChartControl.Titles>
+                            <dxc:ChartControl.Legend>
+                                <dxc:Legend HorizontalPosition="RightOutside"/>
+                            </dxc:ChartControl.Legend>
+                            <dxc:ChartControl.ToolTipController>
+                                <dxc:ChartToolTipController AutoPopDelay="0" InitialDelay="0"/>
+                            </dxc:ChartControl.ToolTipController>
+                        </dxc:ChartControl>
+                    </Viewbox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type chart:ThreeCircleChart}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type chart:ThreeCircleChart}">
+                    <Viewbox VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                        <Grid>
+                            <!--最外层-->
+                            <Ellipse Width="5" Height="5" Fill="#00C2FF" Opacity="1" StrokeThickness="0" Margin="10 0 0 117"/>
+                            <ed:Arc x:Name="BackCircle" ArcThickness="3" ArcThicknessUnit="Pixel" EndAngle="270" Height="120" Width="120" StartAngle="0" Fill="#313439">
+                                <ed:Arc.RenderTransform>
+                                    <TransformGroup>
+                                        <TranslateTransform X="-120"></TranslateTransform>
+                                        <ScaleTransform ScaleX="-1" ScaleY="1"></ScaleTransform>
+                                        <SkewTransform AngleY="0" AngleX="0"></SkewTransform>
+                                        <RotateTransform Angle="0"></RotateTransform>
+                                    </TransformGroup>
+                                </ed:Arc.RenderTransform>
+                            </ed:Arc>
+                            <ed:Arc x:Name="TargetCircle" ArcThickness="3" ArcThicknessUnit="Pixel" EndAngle="270" Height="120" Width="120" Margin="0" Stretch="None" StartAngle="0" Fill="#00C2FF">
+                                <ed:Arc.RenderTransform>
+                                    <TransformGroup>
+                                        <TranslateTransform X="-120"></TranslateTransform>
+                                        <ScaleTransform ScaleX="-1" ScaleY="1"></ScaleTransform>
+                                        <SkewTransform AngleY="0" AngleX="0"></SkewTransform>
+                                        <RotateTransform Angle="0"></RotateTransform>
+                                    </TransformGroup>
+                                </ed:Arc.RenderTransform>
+                            </ed:Arc>
+                            <!--中间层-->
+                            <Ellipse Width="5" Height="5" Fill="#71FD56" Opacity="1" StrokeThickness="0" Margin="10 0 0 98"/>
+                            <ed:Arc ArcThickness="3" ArcThicknessUnit="Pixel" EndAngle="270" Height="100" Width="100" StartAngle="0" Fill="#313439">
+                                <ed:Arc.RenderTransform>
+                                    <TransformGroup>
+                                        <TranslateTransform X="-100"></TranslateTransform>
+                                        <ScaleTransform ScaleX="-1" ScaleY="1"></ScaleTransform>
+                                        <SkewTransform AngleY="0" AngleX="0"></SkewTransform>
+                                        <RotateTransform Angle="0"></RotateTransform>
+                                    </TransformGroup>
+                                </ed:Arc.RenderTransform>
+                            </ed:Arc>
+                            <ed:Arc ArcThickness="3" ArcThicknessUnit="Pixel" EndAngle="200" Height="100" Width="100" Margin="0" Stretch="None" StartAngle="0" Fill="#71FD56">
+                                <ed:Arc.RenderTransform>
+                                    <TransformGroup>
+                                        <TranslateTransform X="-100"></TranslateTransform>
+                                        <ScaleTransform ScaleX="-1" ScaleY="1"></ScaleTransform>
+                                        <SkewTransform AngleY="0" AngleX="0"></SkewTransform>
+                                        <RotateTransform Angle="0"></RotateTransform>
+                                    </TransformGroup>
+                                </ed:Arc.RenderTransform>
+                            </ed:Arc>
+                            <!--最里层-->
+                            <Ellipse Width="5" Height="5" Fill="#00FFFD" Opacity="1" StrokeThickness="0" Margin="10 0 0 78"/>
+                            <ed:Arc ArcThickness="3" ArcThicknessUnit="Pixel" EndAngle="270" Height="80" Width="80" StartAngle="0" Fill="#313439">
+                                <ed:Arc.RenderTransform>
+                                    <TransformGroup>
+                                        <TranslateTransform X="-80"></TranslateTransform>
+                                        <ScaleTransform ScaleX="-1" ScaleY="1"></ScaleTransform>
+                                        <SkewTransform AngleY="0" AngleX="0"></SkewTransform>
+                                        <RotateTransform Angle="0"></RotateTransform>
+                                    </TransformGroup>
+                                </ed:Arc.RenderTransform>
+                            </ed:Arc>
+                            <ed:Arc ArcThickness="3" ArcThicknessUnit="Pixel" EndAngle="90" Height="80" Width="80" Margin="0" Stretch="None" StartAngle="0" Fill="#00FFFD">
+                                <ed:Arc.RenderTransform>
+                                    <TransformGroup>
+                                        <TranslateTransform X="-80"></TranslateTransform>
+                                        <ScaleTransform ScaleX="-1" ScaleY="1"></ScaleTransform>
+                                        <SkewTransform AngleY="0" AngleX="0"></SkewTransform>
+                                        <RotateTransform Angle="0"></RotateTransform>
+                                    </TransformGroup>
+                                </ed:Arc.RenderTransform>
+                            </ed:Arc>
+                        </Grid>
+                    </Viewbox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type grid:DtaGridCommon}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type grid:DtaGridCommon}">
+                    <Viewbox>
+                        <DataGrid ItemsSource="{Binding DataTable}" DataContext="{TemplateBinding DC}"></DataGrid>
+                    </Viewbox>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

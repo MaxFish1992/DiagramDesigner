@@ -1,0 +1,274 @@
+﻿<dx:DXWindow
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:s="clr-namespace:DiagramDesigner"
+        xmlns:model="clr-namespace:DiagramDesigner.Models"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:btn="clr-namespace:DiagramDesigner.CustomControls.Buttons"
+        xmlns:cmd="clr-namespace:DiagramDesigner.Commands"
+        xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" 
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:dxprg="http://schemas.devexpress.com/winfx/2008/xaml/propertygrid"
+        xmlns:local="clr-namespace:DiagramDesigner"
+        xmlns:color="clr-namespace:Utility.Controls;assembly=Utility.Controls"
+        x:Class="DiagramDesigner.MainView"
+        WindowStartupLocation="CenterScreen"
+        Title="瀚涛天图-大数据可视化设计系统" x:Name="MainWindow"
+        Height="1080" Width="1920" Background="#222528" KeyDown="Window_KeyDown" WindowState="Maximized" Icon="Resources/icons/bigdata.png" dx:ThemeManager.ThemeName="VS2017Dark">
+    <Window.Resources>
+        <ContextMenu x:Key="DesignerCanvasContextMenu">
+            <MenuItem Header="Paste" Command="{x:Static ApplicationCommands.Paste}">
+                <MenuItem.Icon>
+                    <Image Source="Resources/Images/Paste.png" Width="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Select All" Command="{x:Static s:DesignerCanvas.SelectAll}"/>
+        </ContextMenu>
+    </Window.Resources>
+    <Grid Margin="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="395*"/>
+            <ColumnDefinition Width="83*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" Grid.ColumnSpan="2" BorderBrush="#AAAAAA" BorderThickness="0 0 0 2"></Border>
+        <!--<ContentControl Content="{StaticResource MyToolbar}"/>-->
+        <Label Content="{StaticResource MyToolbar}" Grid.ColumnSpan="2"></Label>
+
+
+        <GroupBox Header="分辨率" Style="{StaticResource ToolbarGroup}" Margin="780,10,449,10" Width="150" Height="110">
+            <GroupBox.DataContext>
+                <s:MainViewModel></s:MainViewModel>
+            </GroupBox.DataContext>
+            <Grid Background="#222528">
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Image Source="Resources/icons/宽度.png" Width="16" Height="16"></Image>
+                    <Label Content="宽度：" Foreground="#B7C4CF"></Label>
+                    <TextBox x:Name="WidthTxt" Width="75" Text="{Binding Path=Width,ElementName=MyDesigner}" VerticalContentAlignment="Center" Background="#222528" Foreground="#B7C4CF" >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="TextChanged">
+                                <i:InvokeCommandAction Command="{Binding WidthChangedCmd}" CommandParameter="{Binding ElementName=MainWindow}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Image Source="Resources/icons/高度.png" Width="16" Height="16"></Image>
+                    <Label Content="高度：" Foreground="#B7C4CF"></Label>
+                    <TextBox x:Name="HeightTxt" Width="75" Text="{Binding Path=Height,ElementName=MyDesigner}" VerticalContentAlignment="Center" Background="#222528" Foreground="#B7C4CF" >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="TextChanged">
+                                <i:InvokeCommandAction Command="{Binding HeightChangedCmd}" CommandParameter="{Binding ElementName=MainWindow}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="其它" Style="{StaticResource ToolbarGroup}" Margin="660,0,0,0" Height="110" Width="190">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <Button x:Name="ModuleChange" Grid.Column="0" HorizontalContentAlignment="Center" Margin="8 0 0 0"
+                            Style="{StaticResource ToolBarButtonBaseStyle}" Height="40" Width="80"
+                            Click="ModuleChange_Click">
+                        <Button.Content>
+                            <StackPanel Margin="0 0 0 0" Orientation="Horizontal">
+                                <Image Source="Resources/Pictures/模式.png" Height="30" Width="30"></Image>
+                                <Label x:Name="ModuleLabel" Content="透明" VerticalAlignment="Center" FontSize="12" Foreground="#B7C4CF"></Label>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Margin="10 0 0 0" VerticalAlignment="Center">
+                    <Button Grid.Column="0" HorizontalContentAlignment="Center" Height="40" Width="80"
+                            Style="{StaticResource ToolBarButtonBaseStyle}"
+                            Click="Button_Click">
+                        <Button.Content>
+                            <StackPanel Margin="0 0 0 0" Orientation="Horizontal">
+                                <Image Source="Resources/Pictures/预览.png" Height="30" Width="30"></Image>
+                                <Label Grid.Row="1" Content="预览" VerticalAlignment="Center" FontSize="12" Foreground="#B7C4CF"></Label>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Margin="10 0 0 0" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button x:Name="ColorSelector" Grid.Column="0" HorizontalContentAlignment="Center" Height="40" Width="80"
+                            Style="{StaticResource ToolBarButtonBaseStyle}" Click="ColorSelector_Click">
+                        <Button.Content>
+                            <StackPanel Margin="0 0 0 0" Orientation="Horizontal">
+                                <Image Source="Resources/icons/ColorSelect.png" Height="30" Width="30"></Image>
+                                <Label Grid.Row="1" Content="背景色" VerticalAlignment="Center" FontSize="12" Foreground="#B7C4CF"></Label>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <!--<Button x:Name="CreateExe" Grid.Column="0" HorizontalContentAlignment="Center" Height="40" Width="80"
+                            Style="{StaticResource ToolBarButtonBaseStyle}" Click="CreateExe_Click">
+                        <Button.Content>
+                            <StackPanel Margin="0 0 0 0" Orientation="Horizontal">
+                                <Image Source="Resources/icons/导出.png" Height="30" Width="30"></Image>
+                                <Label Grid.Row="1" Content="生成" VerticalAlignment="Center" FontSize="12" Foreground="#B7C4CF"></Label>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>-->
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+        <!--<Button Width="60" Height="80" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Top" Cursor="Hand" Click="Button_Click">
+            <Button.Template>
+                <ControlTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2*"></RowDefinition>
+                            <RowDefinition Height="1*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Image Source="Resources/Pictures/预览.png"></Image>
+                        <Label Grid.Row="1" Content="预览" HorizontalAlignment="Center" FontSize="16"></Label>
+                    </Grid>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>-->
+
+        <Grid Grid.Row="1" Margin="0,2,0,0" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="265"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <!-- Toolbox -->
+            <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
+                <TabControl>
+                    <TabItem Style="{StaticResource TabItemStyle}" Header="控件">
+                        <StackPanel Background="#222528" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                            <Expander Header="标签" Content="{StaticResource Label_Diag}" IsExpanded="False"/>
+                            <Expander Header="图表" Content="{StaticResource Chart}" IsExpanded="False" VerticalAlignment="Stretch"/>
+                            <Expander Header="文本框" Content="{StaticResource TextBox_Diag}" IsExpanded="False"/>
+                            <Expander Header="按钮" Content="{StaticResource Button}" IsExpanded="False" VerticalAlignment="Stretch"/>
+                            <Expander Header="图片" Content="{StaticResource Image}" IsExpanded="False" VerticalAlignment="Stretch"/>
+                            <Expander Header="表格" Content="{StaticResource Table}" IsExpanded="False" VerticalAlignment="Stretch"/>
+                            <Expander Header="图例" Content="{StaticResource Legend}" IsExpanded="False" VerticalAlignment="Stretch"/>
+                            <!--<Expander Header="Lists" Content="{StaticResource List_Diag}" IsExpanded="False" VerticalAlignment="Stretch"/>-->
+                            <Expander Header="浏览器" Content="{StaticResource Browser}" IsExpanded="False" VerticalAlignment="Stretch"/>
+                        </StackPanel>
+                    </TabItem>
+                    <TabItem Style="{StaticResource TabItemStyle}" Header="数据" Background="#222528">
+                        <StackPanel Background="#222528">
+                            <StackPanel.DataContext>
+                                <local:MainViewModel></local:MainViewModel>
+                            </StackPanel.DataContext>
+                            <ListBox x:Name="Chat_Units" ItemsSource="{Binding DataSourceModels}" Background="#222528">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Margin="10" BorderBrush="#4F6378" BorderThickness="1" Height="100" Width="230">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition></ColumnDefinition>
+                                                    <ColumnDefinition></ColumnDefinition>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock x:Name="Author" Grid.Column="0" Text="{Binding DBAlias}"/>
+                                                <ListBox Grid.Column="1" ItemsSource="{Binding DataItems}" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                                    <ListBox.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock x:Name="Words" Text="{Binding Alias}"/>
+                                                        </DataTemplate>
+                                                    </ListBox.ItemTemplate>
+                                                </ListBox>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <!--<ListBox ItemsSource="{Binding DataSourceModels}">
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="2"/>
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <GroupBox Header="{Binding DBAlias}">
+                                            <GroupItem>
+                                                <ListBox ItemsSource="{Binding DataSourceModels.DataItems}">
+                                                    <ListBox.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <StackPanel>
+                                                                <Label Content="{Binding Alias}" VerticalAlignment="Center" Foreground="{DynamicResource FontColor}"></Label>
+                                                            </StackPanel>
+                                                        </DataTemplate>
+                                                    </ListBox.ItemTemplate>
+                                                </ListBox>
+                                            </GroupItem>
+                                        </GroupBox>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>-->
+                        </StackPanel>
+                    </TabItem>
+                </TabControl>
+                
+            </ScrollViewer>
+
+            <!-- GridSplitter -->
+            <GridSplitter Focusable="False" Width="2" Background="LightGray"
+                    VerticalAlignment="Stretch" HorizontalAlignment="Right"/>
+
+            <Grid x:Name="Grid" Grid.Column="1" Background="Transparent">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <!-- Designer -->
+                <ScrollViewer x:Name="ScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="#222528">
+                    <s:DesignerCanvas Grid.Row="0" Grid.Column="0" Focusable="true" x:Name="MyDesigner" Height="1080" Width="1920"
+                            Background="#2A2E33" FocusVisualStyle="{x:Null}"
+                            ContextMenu="{StaticResource DesignerCanvasContextMenu}">
+                        <!--<s:DesignerItem x:Name="DesignerItem">-->
+
+                        <!--</s:DesignerItem>-->
+                    </s:DesignerCanvas>
+                </ScrollViewer>
+
+                <GridSplitter Focusable="False" Width="2" Background="LightGray"
+                    VerticalAlignment="Stretch" HorizontalAlignment="Right"/>
+                <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+                    <dxprg:PropertyGridControl ScrollViewer.VerticalScrollBarVisibility="Hidden" x:Name="PropertyGridCard" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0 0 0 0" Background="#222528">
+                        <dxprg:PropertyGridControl.DataContext>
+                            <cmd:PropertyGridCommand></cmd:PropertyGridCommand>
+                        </dxprg:PropertyGridControl.DataContext>
+                        <dxprg:PropertyDefinition Type="model:IDataSourceModel">
+                            <dxprg:PropertyDefinition.MenuCustomizations>
+                                <dxb:BarButtonItem  Content="数据源" dxb:CollectionAction.Index="0" Command="{Binding SingleHisDSCmd}" CommandParameter="{Binding ElementName=PropertyGridCard}">
+                                </dxb:BarButtonItem>
+                                <dxb:BarButtonItem  Content="数据接口" dxb:CollectionAction.Index="1" Command="{Binding SingleHisDTCmd}" CommandParameter="{Binding ElementName=PropertyGridCard}">
+                                </dxb:BarButtonItem>
+                            </dxprg:PropertyDefinition.MenuCustomizations>
+                        </dxprg:PropertyDefinition>
+                        <!--<dxprg:PropertyDefinition Type="model:IDataSourceModel">
+                            <dxprg:PropertyDefinition.MenuCustomizations>
+                                <dxb:BarButtonItem  Content="数据源" dxb:CollectionAction.Index="0" Command="{Binding SingleHisDSCmd}" CommandParameter="{Binding ElementName=PropertyGridCard}">
+                                </dxb:BarButtonItem>
+                                <dxb:BarButtonItem  Content="数据接口" dxb:CollectionAction.Index="1" Command="{Binding SingleHisDTCmd}" CommandParameter="{Binding ElementName=PropertyGridCard}">
+                                </dxb:BarButtonItem>
+                            </dxprg:PropertyDefinition.MenuCustomizations>
+                        </dxprg:PropertyDefinition>-->
+                    </dxprg:PropertyGridControl>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+    </Grid>
+</dx:DXWindow>

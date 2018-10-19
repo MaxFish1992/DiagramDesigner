@@ -1,0 +1,104 @@
+﻿<dx:DXWindow x:Class="DiagramDesigner.Windows.WindInterface.InterfaceView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DiagramDesigner.Windows.WindInterface"
+        xmlns:btn="clr-namespace:DiagramDesigner.CustomControls.Buttons"
+        mc:Ignorable="d"
+        Title="数据接口配置" Height="520" Width="680" Top="360" Left="600" Background="#222528" ResizeMode="NoResize" Icon="../../Resources/Images/Interface.png" dx:ThemeManager.ThemeName="VS2017Dark">
+    <Window.DataContext>
+        <local:InterfaceViewModel></local:InterfaceViewModel>
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="220"></RowDefinition>
+            <RowDefinition Height="200"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="10 10 10 0">
+            <Label Content="别       名：" Foreground="{DynamicResource FontColor}"></Label>
+            <TextBox Width="100" Background="#222528" Foreground="#B7C4CF"  Text="{Binding SelectedInterfaceModel.IFAlias}" VerticalContentAlignment="Center"></TextBox>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="10 0 10 0">
+            <Label Content="接口地址：" Foreground="{DynamicResource FontColor}"></Label>
+            <TextBox Width="500" Background="#222528" Foreground="#B7C4CF"  Text="{Binding SelectedInterfaceModel.IFUrl}" VerticalContentAlignment="Center"></TextBox>
+            <Button Content="测试接口" Margin="15 0 5 0" Command="{Binding TestConnectionCmd}"></Button>
+        </StackPanel>
+
+
+        <StackPanel Margin="6 5" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Grid.Column="1" Content="新增" Width="60"  Command="{Binding AddConfigCmd}"></Button>
+            <Button Grid.Column="1" Content="保存" Width="60" Margin="20 0 0 0" Command="{Binding SaveConfigCmd}"></Button>
+            <!--<Button Grid.Column="1" Content="删除" HorizontalAlignment="Right" Width="60"  Command="{Binding DeleteConfigCmd}"  CommandParameter="{Binding ElementName=DataGrid}"></Button>-->
+        </StackPanel>
+
+
+        <!--<StackPanel Grid.Row="2" Orientation="Horizontal" Height="40" Margin="0 5 0 0">
+
+            <Button  Content="新增" HorizontalAlignment="Left" Width="60"  Height="25"  Command="{Binding AddConfigCmd}"></Button>
+            <Button  Content="保存" HorizontalAlignment="Center" Width="60" Height="25"  Command="{Binding SaveConfigCmd}"></Button>
+
+            -->
+        <!--<btn:BottomTxtImageBtn ImageUrl="../../Resources/Images/ApiNew.png" Text="新增" ImageHeight="30" ImageWidth="30" Margin="10 0 0 -10" Command="{Binding AddConfigCmd}"></btn:BottomTxtImageBtn>
+            <btn:BottomTxtImageBtn ImageUrl="../../Resources/Images/ApiSave.png" Text="保存" ImageHeight="30" ImageWidth="30" Margin="20 0 0 -10" Command="{Binding SaveConfigCmd}"></btn:BottomTxtImageBtn>
+            <btn:BottomTxtImageBtn ImageUrl="../../Resources/Images/ApiDelete.png" Text="删除" ImageHeight="30" ImageWidth="30" Margin="20 0 0 -10" Command="{Binding DeleteConfigCmd}" CommandParameter="{Binding ElementName=SelectedInterfaceModel}"></btn:BottomTxtImageBtn>-->
+        <!--
+        </StackPanel>-->
+        <!--暂时只做Get请求，参数可写在ur中-->
+        <StackPanel Grid.Row="3" Margin="10">
+            <Border></Border>
+            <Label Content="测试输出:" Width="120" HorizontalAlignment="Left" Margin="5 0" Foreground="{DynamicResource FontColor}"></Label>
+            <!--<TextBox Width="650" Height="55"  Text="{Binding TestResult}" HorizontalAlignment="Left" Margin="10 0" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible"></TextBox>-->
+            <DataGrid ItemsSource="{Binding TestResult}" VerticalScrollBarVisibility="Auto" Margin="0 10 0 0" Height="160" Background="#222528"></DataGrid>
+        </StackPanel>
+        <StackPanel Grid.Row="4" Margin="10 0 10 0" Height="170">
+            <!--<ContentControl Content="{StaticResource ApiToolbar}"/>-->
+            <Label Content="接口列表:" Margin="0 0 0 10" Foreground="{DynamicResource FontColor}"></Label>
+            <DataGrid Name="dataGrid1" Height="122" AutoGenerateColumns="False" Background="#222528" VerticalScrollBarVisibility="Auto" RowHeight="30" IsReadOnly='True' CanUserAddRows="False" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ItemsSource="{Binding InterfaceModels}">
+                <DataGrid.Columns>
+                    <!--<DataGridTemplateColumn Header="序号" Width="60">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                --><!--上面可加上选择框--><!--
+                                <Label ></Label>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>-->
+                    <DataGridTextColumn Header="接口别名" Width="160" Binding="{Binding IFAlias}"/>
+                    <DataGridTextColumn Header="接口地址" Width="*" Binding="{Binding IFUrl}"/>
+                    <DataGridTemplateColumn Header="编辑" Width="40">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button x:Name="BtnEdit" Width="30" Height="25" Command="{Binding DataContext.EditConfigCmd, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}, Path=SelectedItem}" BorderThickness="0" Cursor="Hand">
+                                    <Button.Template>
+                                        <ControlTemplate>
+                                            <Image Source="../../Resources/icons/编辑.png" Height="20" Width="20"></Image>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="删除" Width="40">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button x:Name="BtnDelete" Width="30" Height="25" Command="{Binding DataContext.DeleteConfigCmd, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}, Path=SelectedItem}" BorderThickness="0" Cursor="Hand">
+                                    <Button.Template>
+                                        <ControlTemplate>
+                                            <Image Source="../../Resources/icons/删除.png" Height="20" Width="20"></Image>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+
+    </Grid>
+</dx:DXWindow>
